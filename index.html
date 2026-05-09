@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BioMed OOP Lab — Python Assessment Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css" />
+  <link rel="stylesheet" href="static/css/main.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loading-inner">
+    <div class="loading-pulse"></div>
+    <div class="loading-text">Initialising Python Runtime...</div>
+    <div class="loading-sub">Loading Pyodide — this may take 20–30 seconds on first visit</div>
+    <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ APP SHELL -->
+<div id="app" class="hidden">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">⚕</div>
+      <div class="logo-text"><span>BioMed</span>OOP Lab</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="home">
+        <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
+      </button>
+      <div class="nav-section-label">Questions</div>
+      <button class="nav-item" data-page="q1">
+        <span class="nav-icon">💉</span>
+        <span class="nav-label">Q1 · Insulin Pump</span>
+        <span class="nav-badge" id="badge-q1">25</span>
+      </button>
+      <button class="nav-item" data-page="q2">
+        <span class="nav-icon">🏥</span>
+        <span class="nav-label">Q2 · Hospital Inventory</span>
+        <span class="nav-badge" id="badge-q2">25</span>
+      </button>
+      <button class="nav-item" data-page="q3">
+        <span class="nav-icon">💊</span>
+        <span class="nav-label">Q3 · Drug Delivery</span>
+        <span class="nav-badge" id="badge-q3">30</span>
+      </button>
+      <button class="nav-item" data-page="q4">
+        <span class="nav-icon">📡</span>
+        <span class="nav-label">Q4 · Signal Processor</span>
+        <span class="nav-badge" id="badge-q4">20</span>
+      </button>
+      <button class="nav-item" data-page="q5">
+        <span class="nav-icon">🔬</span>
+        <span class="nav-label">Q5 · Drug Vehicles</span>
+        <span class="nav-badge" id="badge-q5">25</span>
+      </button>
+      <div class="nav-section-label">Results</div>
+      <button class="nav-item" data-page="summary">
+        <span class="nav-icon">📊</span><span class="nav-label">Summary Report</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-progress">
+      <div class="progress-label">Total Progress</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="global-progress-bar"></div>
+      </div>
+      <div class="progress-score" id="global-score-display">0 / 125</div>
+    </div>
+
+    <button class="reset-btn" id="reset-btn">↺ Reset All Progress</button>
+  </aside>
+
+  <!-- MOBILE TOPBAR -->
+  <div class="mobile-topbar">
+    <button id="mobile-menu-btn">☰</button>
+    <span class="mobile-title">BioMed OOP Lab</span>
+    <span class="mobile-score" id="mobile-score">0/125</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+
+    <!-- ──────────────── HOME PAGE -->
+    <section id="page-home" class="page active">
+      <div class="hero">
+        <div class="hero-tag">Python · Object-Oriented Programming · Biomedical Engineering</div>
+        <h1 class="hero-title">Master OOP Through<br/><em>Medical Innovation</em></h1>
+        <p class="hero-desc">Five comprehensive coding challenges built around real-world biomedical engineering scenarios. Write, run, and get instant AI-powered feedback.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="navigate('q1')">Start Assessment →</button>
+          <button class="btn-ghost" onclick="scrollToResources()">Learning Resources</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">5</span><span class="stat-label">Questions</span></div>
+          <div class="stat"><span class="stat-num">125</span><span class="stat-label">Total Marks</span></div>
+          <div class="stat"><span class="stat-num">7</span><span class="stat-label">OOP Concepts</span></div>
+          <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Attempts</span></div>
+        </div>
+      </div>
+
+      <div class="question-cards">
+        <h2 class="section-heading">Assessment Questions</h2>
+        <div class="cards-grid">
+          <div class="qcard" onclick="navigate('q1')">
+            <div class="qcard-icon">💉</div>
+            <div class="qcard-num">Q1 · 25 marks</div>
+            <div class="qcard-title">Smart Insulin Delivery System</div>
+            <div class="qcard-tags"><span>Abstract Classes</span><span>Inheritance</span><span>Encapsulation</span></div>
+            <div class="qcard-status" id="card-status-q1">Not Started</div>
+          </div>
+          <div class="qcard" onclick="navigate('q2')">
+            <div class="qcard-icon">🏥</div>
+            <div class="qcard-num">Q2 · 25 marks</div>
+            <div class="qcard-title">Hospital Inventory Management</div>
+            <div class="qcard-tags"><span>Composition</span><span>Magic Methods</span><span>Polymorphism</span></div>
+            <div class="qcard-status" id="card-status-q2">Not Started</div>
+          </div>
+          <div class="qcard" onclick="navigate('q3')">
+            <div class="qcard-icon">💊</div>
+            <div class="qcard-num">Q3 · 30 marks</div>
+            <div class="qcard-title">Patient & Drug Management</div>
+            <div class="qcard-tags"><span>Composition</span><span>Inheritance</span><span>Exception Handling</span></div>
+            <div class="qcard-status" id="card-status-q3">Not Started</div>
+          </div>
+          <div class="qcard" onclick="navigate('q4')">
+            <div class="qcard-icon">📡</div>
+            <div class="qcard-num">Q4 · 20 marks</div>
+            <div class="qcard-title">Biomedical Signal Processor</div>
+            <div class="qcard-tags"><span>Abstract Methods</span><span>Polymorphism</span><span>Magic Methods</span></div>
+            <div class="qcard-status" id="card-status-q4">Not Started</div>
+          </div>
+          <div class="qcard" onclick="navigate('q5')">
+            <div class="qcard-icon">🔬</div>
+            <div class="qcard-num">Q5 · 25 marks</div>
+            <div class="qcard-title">Drug Formulation & Vehicles</div>
+            <div class="qcard-tags"><span>Properties</span><span>Custom Exceptions</span><span>Simulation</span></div>
+            <div class="qcard-status" id="card-status-q5">Not Started</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="resources-section" class="resources">
+        <h2 class="section-heading">OOP Quick Reference</h2>
+        <div class="resources-grid">
+          <div class="resource-card">
+            <div class="rc-head">Abstract Base Classes</div>
+            <pre class="rc-code">from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    @abstractmethod
+    def speak(self): ...
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"</pre>
+          </div>
+          <div class="resource-card">
+            <div class="rc-head">Properties &amp; Encapsulation</div>
+            <pre class="rc-code">class Device:
+    def __init__(self):
+        self._battery = 100
+
+    @property
+    def battery(self):
+        return self._battery
+
+    @battery.setter
+    def battery(self, val):
+        if val &lt; 0: raise ValueError
+        self._battery = val</pre>
+          </div>
+          <div class="resource-card">
+            <div class="rc-head">Magic Methods</div>
+            <pre class="rc-code">class Inventory:
+    def __init__(self):
+        self.items = []
+
+    def __len__(self):
+        return len(self.items)
+
+    def __getitem__(self, i):
+        return self.items[i]
+
+    def __str__(self):
+        return f"{len(self)} items"</pre>
+          </div>
+          <div class="resource-card">
+            <div class="rc-head">Composition</div>
+            <pre class="rc-code">class Engine:
+    def start(self): ...
+
+class Car:
+    def __init__(self):
+        # Car HAS-AN Engine
+        self.engine = Engine()
+
+    def drive(self):
+        self.engine.start()</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──────────────── QUESTION PAGES (q1–q5, generated by JS) -->
+    <section id="page-q1" class="page"></section>
+    <section id="page-q2" class="page"></section>
+    <section id="page-q3" class="page"></section>
+    <section id="page-q4" class="page"></section>
+    <section id="page-q5" class="page"></section>
+
+    <!-- ──────────────── SUMMARY PAGE -->
+    <section id="page-summary" class="page">
+      <div class="summary-wrap">
+        <h1 class="summary-title">Assessment Report</h1>
+        <div class="summary-score-ring">
+          <svg viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14"/>
+            <circle cx="100" cy="100" r="80" fill="none" stroke="url(#scoreGrad)" stroke-width="14"
+              stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502"
+              id="score-ring-circle" transform="rotate(-90 100 100)"/>
+            <defs>
+              <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00d4aa"/>
+                <stop offset="100%" stop-color="#0099ff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-inner">
+            <div class="ring-score" id="summary-total-score">0</div>
+            <div class="ring-max">/ 125</div>
+          </div>
+        </div>
+        <div class="summary-grade" id="summary-grade">—</div>
+
+        <div class="summary-breakdown" id="summary-breakdown"></div>
+
+        <div class="summary-recs" id="summary-recommendations"></div>
+
+        <div class="summary-actions">
+          <button class="btn-primary" onclick="exportMarkdown()">Export as Markdown</button>
+          <button class="btn-ghost" onclick="navigate('q1')">Retry Assessment</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ MODALS -->
+<div id="modal-overlay" class="hidden">
+  <div id="modal-box">
+    <div id="modal-title"></div>
+    <div id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn-danger" id="modal-confirm">Confirm</button>
+      <button class="btn-ghost" id="modal-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="hint-toast" class="hidden">
+  <div class="toast-icon">💡</div>
+  <div class="toast-content">
+    <div class="toast-title">Hint</div>
+    <div class="toast-body" id="toast-body"></div>
+  </div>
+  <button class="toast-close" onclick="closeToast()">✕</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SCRIPTS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+<script src="static/js/questions.js"></script>
+<script src="static/js/rubrics.js"></script>
+<script src="static/js/assessor.js"></script>
+<script src="static/js/app.js"></script>
+</body>
+</html>
